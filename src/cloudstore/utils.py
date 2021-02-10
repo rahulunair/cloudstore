@@ -1,7 +1,11 @@
 from concurrent.futures import ProcessPoolExecutor as ppe
 from concurrent.futures import ThreadPoolExecutor as tpe
 from functools import wraps
+from os import read
 import random
+import tarfile
+
+import tqdm
 
 
 def multi_thread(func):
@@ -29,3 +33,18 @@ def gen_random_name(size=6):
     return "".join(
         random.choice("aeiou" if x % 2 else "bcdfghklmnpqrstvwxyz") for x in range(size)
     )
+
+
+def compress(files, tar_file):
+    """compress a file."""
+    if not isinstance(files, list):
+        files = [files]
+    status = tqdm.tqdm(files)
+    with tarfile.open(tar_file, mode="w:gz") as tf:
+        for f in files:
+            tf.add(f)
+            status.set_description(f"compressing {f} in progress")
+
+
+if __name__ == "__main__":
+    compress("./logger.py", "logger")
