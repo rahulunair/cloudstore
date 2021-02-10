@@ -4,7 +4,7 @@ import sys
 import boto3
 from botocore.exceptions import ClientError as aws_error
 
-from cloudstore import CloudStore
+from cloudstore.abstract_store import CloudStore
 from cloudstore.utils import multi_thread
 from cloudstore.utils import gen_random_name
 from cloudstore.logger import logger

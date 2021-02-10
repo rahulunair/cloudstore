@@ -1,15 +1,15 @@
-import abc
+from cloudstore.aws import AWSStore
+from cloudstore.azure import AZRStore
+from cloudstore.gcp import GCStore
 
-class CloudStore(abc.ABC):
-    """cloud store abstract class."""
 
-    def __init__(self):
-        self.client = None
-
-    @abc.abstractmethod
-    def upload(self, bucket: str, file) -> str:
-        raise NotImplementedError
-
-    @abc.abstractmethod
-    def download(self, bucket: str, object_name, file_name):
+def store(cloud="gcp"):
+    """cloud store factory."""
+    if cloud == "gcp":
+        return GCStore()
+    elif cloud == "azure":
+        return AZRStore()
+    elif cloud == "aws":
+        return AWSStore()
+    else:
         raise NotImplementedError

@@ -6,7 +6,7 @@ from google.api_core.exceptions import NotFound as GCS_NotFound
 from google.api_core.exceptions import Forbidden as GCS_Forbidden
 from google.auth.exceptions import DefaultCredentialsError as GCSCREDError
 
-from cloudstore import CloudStore
+from cloudstore.abstract_store import CloudStore
 from cloudstore.utils import multi_thread
 from cloudstore.utils import gen_random_name
 from cloudstore.logger import logger
