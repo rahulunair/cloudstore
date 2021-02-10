@@ -9,9 +9,11 @@ python = "^3.8"
 boto3 = "^1.17.3"
 google-cloud-storage = "^1.35.1"
 azure-storage-blob = "^12.7.1"
+tqdm = "^4.56.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
+black = {version = "^20.8b1", allow-prereleases = true}
 
 [tool.poetry.scripts]
 haxo = "cloudstore.console:cli"
