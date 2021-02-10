@@ -49,9 +49,13 @@ class GCStore(CloudStore):
             GCStore.client = google_store.Client()
             self.client = GCStore.client
         except GCSCREDError as e:
-            logger.error(("\ncredentials file is expected"
-                          "\nuse: GOOGLE_APPLICATION_CREDENTIALS env var to set the path to the credential file"
-                          "\nsee: https://cloud.google.com/docs/authentication/getting-started#setting_the_environment_variable"))
+            logger.error(
+                (
+                    "\ncredentials file is expected"
+                    "\nuse: GOOGLE_APPLICATION_CREDENTIALS env var to set the path to the credential file"
+                    "\nsee: https://cloud.google.com/docs/authentication/getting-started#setting_the_environment_variable"
+                )
+            )
             logger.error("credentials not given, exiting..")
             sys.exit(1)
 
@@ -62,10 +66,13 @@ class GCStore(CloudStore):
         try:
             new_bucket = self.client.create_bucket(bucket, location="us")
         except GCS_Forbidden:
-            new_bucket = self.client.create_bucket("bucket_" + gen_random_name(), location="us")
-        logger.info("created new bucket {} in {} with storage class {}".format(
-            new_bucket.name, new_bucket.location, new_bucket.storage_class
-        )
+            new_bucket = self.client.create_bucket(
+                "bucket_" + gen_random_name(), location="us"
+            )
+        logger.info(
+            "created new bucket {} in {} with storage class {}".format(
+                new_bucket.name, new_bucket.location, new_bucket.storage_class
+            )
         )
         return new_bucket
 
@@ -76,7 +83,9 @@ class GCStore(CloudStore):
         try:
             bucket = self.client.get_bucket(bucket_name)
         except GCS_Forbidden:
-            logger.error("you dont have access, to the bucket, trying to create a new one..")
+            logger.error(
+                "you dont have access, to the bucket, trying to create a new one.."
+            )
             create_b = True
         except GCS_NotFound as e:
             logger.error("bucket name not found, trying to create a new one")
@@ -87,7 +96,13 @@ class GCStore(CloudStore):
         blob = bucket.blob(file)
         blob.upload_from_filename(file)
         logger.info("file saved, URL:{}".format(blob.public_url))
-        return json.dumps(dict(bucket_name=blob.bucket.name, object_name=blob.name, public_url=blob.public_url))
+        return json.dumps(
+            dict(
+                bucket_name=blob.bucket.name,
+                object_name=blob.name,
+                public_url=blob.public_url,
+            )
+        )
 
     @multi_thread
     def download(self, bucket, object_name, file_name):

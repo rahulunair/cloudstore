@@ -1,0 +1,19 @@
+import json
+import sys
+
+import azure.storage.blob as azure_store
+
+from cloudstore.utils import multi_thread
+from cloudstore.utils import gen_random_name
+from cloudstore.logger import logger
+from cloudstore import CloudStore
+
+
+class AZRStore(CloudStore):
+    """azure cloud store."""
+
+    def upload(self, bucket: str, file) -> str:
+        pass
+
+    def download(self, bucket, file):
+        pass
