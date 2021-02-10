@@ -35,16 +35,21 @@ def gen_random_name(size=6):
     )
 
 
+@multi_thread
 def compress(files, tar_file):
     """compress a file."""
     if not isinstance(files, list):
         files = [files]
     status = tqdm.tqdm(files)
-    with tarfile.open(tar_file, mode="w:gz") as tf:
+    with tarfile.open(tar_file + ".tar.gz", mode="w:gz") as tf:
         for f in files:
             tf.add(f)
             status.set_description(f"compressing {f} in progress")
 
 
-if __name__ == "__main__":
-    compress("./logger.py", "logger")
+@multi_thread
+def decompress(tar_file):
+    """decompress a tar gz file."""
+    with tarfile.open(tar_file) as tf:
+        for fl in tqdm.tqdm(iterable=tf.getmembers(), total=len(tf.getmembers())):
+            tf.extract(member=fl)
