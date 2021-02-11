@@ -8,7 +8,7 @@ class CloudStore(abc.ABC):
         self.client = None
 
     @abc.abstractmethod
-    def upload(self, bucket: str, file: str) -> str:
+    def upload(self, bucket: str, file_name: str) -> str:
         raise NotImplementedError
 
     @abc.abstractmethod

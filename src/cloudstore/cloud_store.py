@@ -9,9 +9,8 @@ def store(cloud="gcp"):
         return GCStore()
     elif cloud == "azure":
         raise NotImplementedError
-        #return AZRStore()
+        # return AZRStore()
     elif cloud == "aws":
-        raise NotImplementedError
-        #return AWSStore()
+        return AWSStore()
     else:
         raise NotImplementedError

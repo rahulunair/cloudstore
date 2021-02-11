@@ -49,7 +49,7 @@ class GCStore(CloudStore):
         return new_bucket
 
     @multi_thread
-    def upload(self, bucket_name: str, file):
+    def upload(self, bucket_name: str, file_name):
         """upload file to google cloud."""
         create_b = False
         try:
@@ -65,8 +65,8 @@ class GCStore(CloudStore):
             create_b = True
         if create_b:
             bucket = self.create_bucket(bucket_name)
-        blob = bucket.blob(file)
-        blob.upload_from_filename(file)
+        blob = bucket.blob(file_name)
+        blob.upload_from_filename(file_name)
         logger.info("file saved, URL:{}".format(blob.public_url))
         return json.dumps(
             dict(
