@@ -17,7 +17,14 @@ class AZRStore(CloudStore):
 
     def __init__(self):
         connect_str = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
-        AZRStore.client = BlobServiceClient.from_connection_string(connect_str)
+        if connect_str is None:
+            logger.error("AZURE_STORAGE_CONNECTION_STRING env variable not set")
+            sys.exit(1)
+        try:
+            AZRStore.client = BlobServiceClient.from_connection_string(connect_str)
+        except ValueError:
+            logger.error("AZURE_STORAGE_CONNECTION_STRING string malformed, check the env variable.")
+            sys.exit(1)
         self.client = AZRStore.client
 
     def create_bucket(self, bucket):

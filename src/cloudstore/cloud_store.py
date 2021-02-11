@@ -1,5 +1,5 @@
 from cloudstore.aws import AWSStore
-from cloudstore.azure import AZRStore
+from cloudstore.azre import AZRStore
 from cloudstore.gcp import GCStore
 
 
@@ -8,8 +8,7 @@ def store(cloud="gcp"):
     if cloud == "gcp":
         return GCStore()
     elif cloud == "azure":
-        raise NotImplementedError
-        # return AZRStore()
+        return AZRStore()
     elif cloud == "aws":
         return AWSStore()
     else:
