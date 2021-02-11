@@ -4,7 +4,7 @@ import sys
 
 from azure.storage.blob import BlobServiceClient
 from azure.storage.blob import BlobClient
-from azure.storage.blob import ContainerClient,
+from azure.storage.blob import ContainerClient
 
 from cloudstore.abstract_store import CloudStore
 from cloudstore.utils import multi_thread
@@ -14,14 +14,20 @@ from cloudstore.logger import logger
 
 class AZRStore(CloudStore):
     """azure cloud store."""
+
     def __init__(self):
-        connect_str = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
+        connect_str = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
         AZRStore.client = BlobServiceClient.from_connection_string(connect_str)
         self.client = AZRStore.client
 
     def create_bucket(self, bucket):
         container_client = self.client.create_container(bucket)
         logger.info("bucket : {} created".format(container_client))
+        return container_client
+
+    def delete_bucket(self, bucket):
+        container_client = self.client.get_container_client(bucket)
+        container_client.delete_container()
 
     @multi_thread
     def upload(self, bucket: str, file_name: str):
@@ -36,4 +42,3 @@ class AZRStore(CloudStore):
         data = blob.readall()
         with open(file_name, "wb") as fh:
             fh.write(data)
-
