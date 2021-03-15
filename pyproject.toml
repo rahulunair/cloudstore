@@ -14,6 +14,7 @@ tqdm = "^4.56.2"
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
 black = {version = "^20.8b1", allow-prereleases = true}
+icecream = {version = "^2.1.0", allow-prereleases = true}
 
 [tool.poetry.scripts]
 haxo = "cloudstore.console:cli"
