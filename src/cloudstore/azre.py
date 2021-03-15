@@ -1,14 +1,12 @@
-import os
 import json
+import os
+from pathlib import Path
 import sys
 
 from azure.storage.blob import BlobServiceClient
-from azure.storage.blob import BlobClient
-from azure.storage.blob import ContainerClient
 
 from cloudstore.abstract_store import CloudStore
 from cloudstore.utils import multi_thread
-from cloudstore.utils import gen_random_name
 from cloudstore.logger import logger
 
 
@@ -23,7 +21,9 @@ class AZRStore(CloudStore):
         try:
             AZRStore.client = BlobServiceClient.from_connection_string(connect_str)
         except ValueError:
-            logger.error("AZURE_STORAGE_CONNECTION_STRING string malformed, check the env variable.")
+            logger.error(
+                "AZURE_STORAGE_CONNECTION_STRING string malformed, check the env variable."
+            )
             sys.exit(1)
         self.client = AZRStore.client
 
@@ -41,11 +41,24 @@ class AZRStore(CloudStore):
         blob_client = self.client.get_blob_client(container=bucket, blob=file_name)
         with open(file_name, "rb") as fh:
             blob_client.upload_blob(fh)
+        return json.dumps(
+            dict(
+                bucket_name=bucket,
+                object_name=blob_client.blob_name,
+                public_url=blob_client.url,
+            )
+        )
 
     @multi_thread
     def download(self, bucket, object_name, file_name):
         blob_client = self.client.get_blob_client(container=bucket, blob=object_name)
-        blob = blob_client.download_blob()
-        data = blob.readall()
         with open(file_name, "wb") as fh:
-            fh.write(data)
+            blob = blob_client.download_blob()
+            blob.readinto(fh)
+        return json.dumps(
+            dict(
+                bucket_name=bucket,
+                object_name=blob_client.blob_name,
+                file_name=Path(file_name).resolve(),
+            )
+        )

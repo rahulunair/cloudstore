@@ -20,7 +20,7 @@ class GCStore(CloudStore):
         try:
             GCStore.client = google_store.Client()
             self.client = GCStore.client
-        except GCSCREDError as e:
+        except GCSCREDError:
             logger.error(
                 (
                     "\ncredentials file is expected"
