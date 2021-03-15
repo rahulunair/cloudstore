@@ -1,9 +1,11 @@
-from cloudstore.aws import AWSStore
-from cloudstore.azre import AZRStore
-from cloudstore.gcp import GCStore
+"""store dispatcher."""
+
+from cloudstore.stores.aws import AWSStore
+from cloudstore.stores.azre import AZRStore
+from cloudstore.stores.gcp import GCStore
 
 
-def store(cloud="gcp"):
+def store(cloud):
     """cloud store factory."""
     if cloud == "gcp":
         return GCStore()
