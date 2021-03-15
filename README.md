@@ -11,7 +11,7 @@ A multi cloud storage API that can be used to upload and download contents.
 ## Installation instructions
 
 ```bash
-pip3 install cloudstore==0.2.0
+pip3 install cloudstore==0.3.0
 
 ```
 
