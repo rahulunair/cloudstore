@@ -1,7 +1,8 @@
+"""utilities for cloudstore."""
+
 from concurrent.futures import ProcessPoolExecutor as ppe
 from concurrent.futures import ThreadPoolExecutor as tpe
 from functools import wraps
-from os import read
 import random
 import tarfile
 
@@ -41,15 +42,17 @@ def compress(files, tar_file):
     if not isinstance(files, list):
         files = [files]
     status = tqdm.tqdm(files)
-    with tarfile.open(tar_file + ".tar.gz", mode="w:gz") as tf:
-        for f in files:
-            tf.add(f)
-            status.set_description(f"compressing {f} in progress")
+    with tarfile.open(tar_file + ".tar.gz", mode="w:gz") as tr_file:
+        for member in files:
+            tr_file.add(member)
+            status.set_description(f"compressing {member} in progress")
 
 
 @multi_thread
 def decompress(tar_file):
     """decompress a tar gz file."""
-    with tarfile.open(tar_file) as tf:
-        for fl in tqdm.tqdm(iterable=tf.getmembers(), total=len(tf.getmembers())):
-            tf.extract(member=fl)
+    with tarfile.open(tar_file) as tr_file:
+        for member in tqdm.tqdm(
+            iterable=tr_file.getmembers(), total=len(tr_file.getmembers())
+        ):
+            tr_file.extract(member=member)
